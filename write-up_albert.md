@@ -44,7 +44,7 @@ The next accounts :
 * "0xce5144391b4ab80668965f2cc4f2cc102380ef0a"
 * "0x460c31107dd048e34971e57da2f99f659add4f02"
 
-has been extracted from ganache-cli used in the testing phase (see how to get the private keys for this accounts  in https://github.com/udacity/nd1309-Project-6b-Example-Template)an exported in my Metamask.
+has been extracted from ganache-cli used in the testing phase (see how to get the private keys for this accounts  in https://github.com/udacity/nd1309-Project-6b-Example-Template) an exported in my Metamask.
 
 #### Product Overview  with the contract owner account 
 ![productOverview](images_albert/productOverview.png)
