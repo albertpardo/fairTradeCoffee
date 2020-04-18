@@ -1,5 +1,15 @@
 # Write-up
 
+## Project Info
+
+* SupplyChain addres : 0x78aEbB3aec7f7162F0BFE43B6C49BCC48D76a90e
+* Rinkeby : https://rinkeby.etherscan.io/address/0x78aEbB3aec7f7162F0BFE43B6C49BCC48D76a90e
+
+* Truffle v5.1.14-nodeLTS.0 (core: 5.1.13) with :
+  * Solidity v0.5.16 (solc-js)
+  * Node v12.16.1
+  * Web3.js v1.2.1
+
 ## UML
 Diagrams done with [https://app.diagrams.net/](https://app.diagrams.net/)
 
