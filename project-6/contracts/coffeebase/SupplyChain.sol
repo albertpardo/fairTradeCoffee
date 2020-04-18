@@ -87,7 +87,7 @@ contract SupplyChain is FarmerRole, DistributorRole, RetailerRole, ConsumerRole 
     require(msg.value >= _price, "Amount to Pay < Price");
     _;
   }
- 
+
   // Define a modifier that checks the price and refunds the remaining balance
   modifier checkValue(uint256 _upc) {
     _;
@@ -158,6 +158,23 @@ contract SupplyChain is FarmerRole, DistributorRole, RetailerRole, ConsumerRole 
     if (msg.sender == owner) {
       selfdestruct(owner);
     }
+  }
+
+  //Functions for set Roles
+  function setFarmer(address _address) public onlyOwner() {
+    addFarmer(_address);
+  }
+
+  function setDistributor(address _address) public onlyOwner() {
+    addDistributor(_address);
+  }
+
+  function setRetailer(address _address) public onlyOwner() {
+    addRetailer(_address);
+  }
+
+  function setConsumer(address _address) public onlyOwner() {
+    addConsumer(_address);
   }
 
   // Define a function 'harvestItem' that allows a farmer to mark an item 'Harvested'
@@ -257,14 +274,14 @@ contract SupplyChain is FarmerRole, DistributorRole, RetailerRole, ConsumerRole 
     // Call modifer to check if buyer has paid enough
     paidEnough(items[_upc].productPrice)
     // Call modifer to send any excess ether back to buyer
-    checkValue(upc)
+    checkValue(_upc)
     {
       // Update the appropriate fields - ownerID, distributorID, itemState
       items[_upc].ownerID = msg.sender;
       items[_upc].distributorID = msg.sender;
       items[_upc].itemState = State.Sold;
       // Transfer money to farmer
-      items[_upc].originFarmerID.transfer(msg.value);
+      items[_upc].originFarmerID.transfer(items[_upc].productPrice);
       // emit the appropriate event
       emit Sold(_upc);
   }
@@ -291,7 +308,7 @@ contract SupplyChain is FarmerRole, DistributorRole, RetailerRole, ConsumerRole 
     // Checks msg.sender is Retailer
     onlyRetailer()
     // Call modifier to check if upc has passed previous supply chain stage
-    shipped(upc)
+    shipped(_upc)
     // Access Control List enforced by calling Smart Contract / DApp
     {
       // Update the appropriate fields - ownerID, retailerID, itemState

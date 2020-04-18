@@ -82,36 +82,66 @@ contract('SupplyChain', function(accounts) {
     console.log("Retailer: accounts[3] ", accounts[3])
     console.log("Consumer: accounts[4] ", accounts[4])
 
-    // 0 test
+    // 0 th Test - For testing Roles sets
     it('Asign and ckecks Accounts to their Roles', async ()=> {
         const supplyChain = await SupplyChain.deployed()
 
-        //Add a farmer, a distributor, a retailer, a consumer in their roles
-        await supplyChain.addFarmer(originFarmerID)
-        await supplyChain.addDistributor(distributorID)
-        await supplyChain.addRetailer(retailerID)
-        await supplyChain.addConsumer(consumerID)
+        // Declare and Initialize a variable for events
+        let farmerAdded = false
+        let distributorAdded = false
+        let retailerAdded = false
+        let consumerAdded = false
+        
+        // Watch the emitted event FarmSet()
+        await supplyChain.FarmerAdded((err, res) => {
+            farmerAdded = true
+        })
+
+        // Watch the emitted event DistributorSet()
+        await supplyChain.DistributorAdded((err, res) => {
+            distributorAdded = true
+        })        
+        
+        // Watch the emitted event RetailerSet()
+        await supplyChain.RetailerAdded((err, res) => {
+            retailerAdded = true
+        })
+
+        // Watch the emitted event ConsumerSet()
+        await supplyChain.ConsumerAdded((err, res) => {
+            consumerAdded = true
+        })
 
         // Retrieve confirm Roles
-        const isFarmer = await supplyChain.isFarmer(originFarmerID)
-        const isDistributor = await supplyChain.isDistributor(distributorID)
-        const isRetailer = await supplyChain.isRetailer(retailerID)
-        const isConsumer = await supplyChain.isConsumer(consumerID)
+        let isOnwerFarmerRole = await supplyChain.isFarmer(ownerID)
+        let isOwnerDistributorRole = await supplyChain.isDistributor(ownerID)
+        let isOwnerRetailerRole = await supplyChain.isRetailer(ownerID)
+        let isOwnerCosumerRole = await supplyChain.isConsumer(ownerID)
 
-        // Verify the result set
-        assert.equal(isFarmer, true, 'Error: Invalid Farmer')
-        assert.equal(isDistributor, true, 'Error: Invalid Distributor')
-        assert.equal(isRetailer, true, 'Error: Invalid Retailer')
-        assert.equal(isConsumer, true,' Error: Invalid Consumer')
+
+        await supplyChain.setFarmer(originFarmerID)
+        await supplyChain.setDistributor(distributorID)
+        await supplyChain.setRetailer(retailerID)
+        await supplyChain.setConsumer(consumerID)
+
+        
+        // Verify the result set OwnerRole
+        assert.equal(isOnwerFarmerRole, true, 'Error : No FarmerRole for Owner')
+        assert.equal(isOwnerDistributorRole, true, 'Error : No Distributor for Owner')
+        assert.equal(isOwnerRetailerRole, true, 'Error : No Retailer for Owner')
+        assert.equal(isOwnerCosumerRole, true, 'Error : No Consumer for Owner')
+
+        // Verify the result set Roles
+        assert.equal(farmerAdded, true, 'Error: Farmer no Added')
+        assert.equal(distributorAdded, true, 'Error: Distributor no Added')
+        assert.equal(retailerAdded, true, 'Error: Retailer no Added')
+        assert.equal(consumerAdded, true, 'Error: Consumer no Added')
 
     })
+
     // 1st Test
     it("Testing smart contract function harvestItem() that allows a farmer to harvest coffee", async() => {
         const supplyChain = await SupplyChain.deployed()
-        // await supplyChain.addFarmer(accounts[1]);
-        // await supplyChain.addDistributor(accounts[2]);
-        // await supplyChain.addRetailer(accounts[3]);
-        // await supplyChain.addConsumer(accounts[4]);
 
         // Declare and Initialize a variable for event
         var eventEmitted = false

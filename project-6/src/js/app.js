@@ -1,3 +1,11 @@
+///Available Accounts used in ganache-cli with info provided by Udacity
+///==============================================
+///(0) 0x27d8d15cbc94527cadf5ec14b69519ae23288b95
+///(1) 0x018c2dabef4904ecbd7118350a0c54dbeae3549a
+///(2) 0xce5144391b4ab80668965f2cc4f2cc102380ef0a
+///(3) 0x460c31107dd048e34971e57da2f99f659add4f02
+///(4) 0xd37b7b8c62be2fdde8daa9816483aebdbd356088
+
 App = {
     web3Provider: null,
     contracts: {},
@@ -5,22 +13,31 @@ App = {
     sku: 0,
     upc: 0,
     metamaskAccountID: "0x0000000000000000000000000000000000000000",
-    ownerID: "0x0000000000000000000000000000000000000000",
-    originFarmerID: "0x0000000000000000000000000000000000000000",
+    ownerID: "0x27d8d15cbc94527cadf5ec14b69519ae23288b95",
+    originFarmerID: "0x018c2dabef4904ecbd7118350a0c54dbeae3549a",
     originFarmName: null,
     originFarmInformation: null,
     originFarmLatitude: null,
     originFarmLongitude: null,
     productNotes: null,
     productPrice: 0,
-    distributorID: "0x0000000000000000000000000000000000000000",
-    retailerID: "0x0000000000000000000000000000000000000000",
-    consumerID: "0x0000000000000000000000000000000000000000",
+    distributorID: "0xce5144391b4ab80668965f2cc4f2cc102380ef0a",
+    retailerID: "0x460c31107dd048e34971e57da2f99f659add4f02",
+    consumerID: "0xd37b7b8c62be2fdde8daa9816483aebdbd356088",
 
     init: async function () {
+        App.writeFormRoles();   //Update form with Accounts form Ganache-cli
         App.readForm();
         /// Setup access to blockchain
         return await App.initWeb3();
+    },
+
+    writeFormRoles: function () {
+        $("#ownerID").val(App.ownerID);
+        $("#originFarmerID").val(App.originFarmerID);
+        $("#distributorID").val(App.distributorID);
+        $("#retailerID").val(App.retailerID);
+        $("#consumerID").val(App.consumerID);
     },
 
     readForm: function () {
@@ -32,6 +49,54 @@ App = {
         App.originFarmInformation = $("#originFarmInformation").val();
         App.originFarmLatitude = $("#originFarmLatitude").val();
         App.originFarmLongitude = $("#originFarmLongitude").val();
+        App.productNotes = $("#productNotes").val();
+        App.productPrice = $("#productPrice").val();
+        App.distributorID = $("#distributorID").val();
+        App.retailerID = $("#retailerID").val();
+        App.consumerID = $("#consumerID").val();
+
+        console.log(
+            App.sku,
+            App.upc,
+            App.ownerID, 
+            App.originFarmerID, 
+            App.originFarmName, 
+            App.originFarmInformation, 
+            App.originFarmLatitude, 
+            App.originFarmLongitude, 
+            App.productNotes, 
+            App.productPrice, 
+            App.distributorID, 
+            App.retailerID, 
+            App.consumerID
+        );
+    },
+
+    readFarmDetails: function() {
+        App.originFarmerID = $("#originFarmerID").val();
+        App.originFarmName = $("#originFarmName").val();
+        App.originFarmInformation = $("#originFarmInformation").val();
+        App.originFarmLatitude = $("#originFarmLatitude").val();
+        App.originFarmLongitude = $("#originFarmLongitude").val();
+
+        console.log(
+            App.sku,
+            App.upc,
+            App.ownerID, 
+            App.originFarmerID, 
+            App.originFarmName, 
+            App.originFarmInformation, 
+            App.originFarmLatitude, 
+            App.originFarmLongitude, 
+            App.productNotes, 
+            App.productPrice, 
+            App.distributorID, 
+            App.retailerID, 
+            App.consumerID
+        );
+    },
+
+    readProductDetails: function() {
         App.productNotes = $("#productNotes").val();
         App.productPrice = $("#productPrice").val();
         App.distributorID = $("#distributorID").val();
@@ -74,7 +139,8 @@ App = {
         }
         // If no injected web3 instance is detected, fall back to Ganache
         else {
-            App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
+            console.log("No injected web3 instance is detected, fall back to Ganache ");
+            App.web3Provider = new Web3(Web3.providers.HttpProvider('http://localhost:8545'));
         }
 
         App.getMetaskAccountID();
@@ -160,12 +226,63 @@ App = {
             case 10:
                 return await App.fetchItemBufferTwo(event);
                 break;
+            case 20:
+                return await App.setRoles(event);
+                break;
             }
+    },
+
+    setRoles: async (event) => {
+        event.preventDefault();
+        var processId = parseInt($(event.target).data('id'));
+
+        App.readForm();
+
+        //Farmer
+        App.contracts.SupplyChain.deployed().then(function(instance) {
+            return instance.setFarmer(App.originFarmerID, {from: App.metamaskAccountID});   //Only ownerID can do it
+        }).then(function(result) {
+            $("#ftc-item").text(result);
+            console.log('addFarmer: ' + JSON.stringify(result));
+        }).catch(function(err) {
+            console.log(err.message);
+        });
+
+        //Distributor
+        App.contracts.SupplyChain.deployed().then(function(instance) {
+            return instance.setDistributor(App.distributorID, {from: App.metamaskAccountID});   //Only ownerID can do it
+        }).then(function(result) {
+            $("#ftc-item").text(result);
+            console.log('addDistributor: ' + JSON.stringify(result));
+        }).catch(function(err) {
+            console.log(err.message);
+        });
+
+        // Retailer
+        App.contracts.SupplyChain.deployed().then(function(instance) {
+            return instance.setRetailer(App.retailerID, {from: App.metamaskAccountID});   //Only ownerID can do it
+        }).then(function(result) {
+            $("#ftc-item").text(result);
+            console.log('addRetailer: ' + JSON.stringify(result));
+        }).catch(function(err) {
+            console.log(err.message);
+        });
+        // Consumer
+        App.contracts.SupplyChain.deployed().then(function(instance) {
+            return instance.setConsumer(App.consumerID, {from: App.metamaskAccountID});   //Only ownerID can do it
+        }).then(function(result) {
+            $("#ftc-item").text(result);
+            console.log('addConsumer: ' + JSON.stringify(result));
+        }).catch(function(err) {
+            console.log(err.message);
+        });        
     },
 
     harvestItem: function(event) {
         event.preventDefault();
         var processId = parseInt($(event.target).data('id'));
+
+        App.readFarmDetails();
 
         App.contracts.SupplyChain.deployed().then(function(instance) {
             return instance.harvestItem(
@@ -175,7 +292,8 @@ App = {
                 App.originFarmInformation, 
                 App.originFarmLatitude, 
                 App.originFarmLongitude, 
-                App.productNotes
+                App.productNotes,
+                {from: App.metamaskAccountID}
             );
         }).then(function(result) {
             $("#ftc-item").text(result);
@@ -218,7 +336,7 @@ App = {
         var processId = parseInt($(event.target).data('id'));
 
         App.contracts.SupplyChain.deployed().then(function(instance) {
-            const productPrice = web3.toWei(1, "ether");
+            const productPrice = web3.toWei(App.productPrice, "ether");
             console.log('productPrice',productPrice);
             return instance.sellItem(App.upc, App.productPrice, {from: App.metamaskAccountID});
         }).then(function(result) {
@@ -233,8 +351,12 @@ App = {
         event.preventDefault();
         var processId = parseInt($(event.target).data('id'));
 
+        App.readProductDetails()
+
         App.contracts.SupplyChain.deployed().then(function(instance) {
-            const walletValue = web3.toWei(3, "ether");
+            const walletValue = web3.toWei('2', "ether");
+            console.log("Value : " + walletValue);
+            
             return instance.buyItem(App.upc, {from: App.metamaskAccountID, value: walletValue});
         }).then(function(result) {
             $("#ftc-item").text(result);
