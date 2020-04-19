@@ -2,8 +2,8 @@
 
 ## Project Info
 
-* SupplyChain addres : 0x78aEbB3aec7f7162F0BFE43B6C49BCC48D76a90e
-* Rinkeby : https://rinkeby.etherscan.io/address/0x78aEbB3aec7f7162F0BFE43B6C49BCC48D76a90e
+* SupplyChain addres : 0x62eC3AE9e3c6A4bc8c7890C82B8B531A15d5E1Fc
+* Rinkeby : https://rinkeby.etherscan.io/address/0x62eC3AE9e3c6A4bc8c7890C82B8B531A15d5E1Fc
 
 * Truffle v5.1.14-nodeLTS.0 (core: 5.1.13) with :
   * Solidity v0.5.16 (solc-js)
@@ -43,11 +43,10 @@ I did not use IPFS for this project. However. It is possible to use IPFS for :
 ## General Description
 ### Rinkeby
 
-SupplyChain addres : 0x78aEbB3aec7f7162F0BFE43B6C49BCC48D76a90e
+ * SupplyChain addres : 0x78aEbB3aec7f7162F0BFE43B6C49BCC48D76a90e
+ * Rinkeby link : https://rinkeby.etherscan.io/address/0x78aEbB3aec7f7162F0BFE43B6C49BCC48D76a90e
 
-Rinkeby link : https://rinkeby.etherscan.io/address/0x78aEbB3aec7f7162F0BFE43B6C49BCC48D76a90e
-
-### Screens of the fornt End using Rinkeby network
+### Front End Screens using Rinkeby network
 
 The next accounts :
 * "0x018c2dabef4904ecbd7118350a0c54dbeae3549a"
@@ -68,13 +67,27 @@ The Set Roles Button let the contract owner add new farm , distributor and consu
 ![productDetailsAndSetRoles](images_albert/productDetailsAndSetRoles.png)
 
 
-#### First group of transactions on Rinkeby
+#### Transactions
+
+##### Transactions done with contract version : 0x62eC3AE9e3c6A4bc8c7890C82B8B531A15d5E1Fc
+Using Ownable.sol
+* Rinkeby : https://rinkeby.etherscan.io/address/0x62eC3AE9e3c6A4bc8c7890C82B8B531A15d5E1Fc
+
+Transctions done bythe contract Owner:
+
+![track usigOwner.sol](images_albert/2020-04-19_TransactionsByOwnerUsingOwner.sol.png)
+
+##### Transactions done with contract version : 0x78aEbB3aec7f7162F0BFE43B6C49BCC48D76a90e
+* Rinkeby : https://rinkeby.etherscan.io/address/0x78aEbB3aec7f7162F0BFE43B6C49BCC48D76a90e
+
+This contract don'n use Ownable.sol
+###### First group of transactions on Rinkeby
 The next transactions are being done using the contract' Owner account "0x20d8E4818B6819AD21943D8519134ee01bd4Da13" for all the roles on Rinkebay network.
 
 ![track](images_albert/track.png)
 
 
-#### More Transactions on Rinkeby
+###### More Transactions on Rinkeby
 Transactions done using the account "0x018C2daBef4904ECbd7118350A0c54DbeaE3549A" activated as Farmer Role.
 
 ![farmerTRasactions](images_albert/farmerTRasactions.png)
